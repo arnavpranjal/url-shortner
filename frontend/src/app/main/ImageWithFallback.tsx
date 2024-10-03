@@ -27,7 +27,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   }, []);
 
   return (
-    <div style={{width:'20px',height:'20px',marginRight : '2px'}}>
+    <div style={{width:'20px',height:'20px',marginRight : '5px'}}>
     <Image
       {...props}
       src={imgSrc}

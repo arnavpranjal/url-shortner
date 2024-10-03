@@ -6,9 +6,7 @@ declare class signInDto {
 export declare class AuthController {
     private authService;
     constructor(authService: AuthService);
-    signIn(signInDto: signInDto): Promise<{
-        access_token: string;
-    }>;
+    signIn(signInDto: signInDto): Promise<any>;
     getProfile(req: any): any;
 }
 export {};

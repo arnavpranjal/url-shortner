@@ -3,9 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { User } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 import React, { useState, FormEvent } from "react";
+import Loading from "./Loading";
+import { toast } from "./ui/use-toast";
 export default function Login({ setPage }: any) {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const guestLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("/main");
+  };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     validateEmail(email);
@@ -13,17 +21,33 @@ export default function Login({ setPage }: any) {
 
     if (!emailError && !passwordError) {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      const response = await fetch(`${backendUrl}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      try {
+        setIsLoading(true);
+        const response = await fetch(`${backendUrl}/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      console.log(data);
+        console.log(data);
+
+        if (response?.ok) {
+          sessionStorage.setItem("jwt", data.access_token);
+          sessionStorage.setItem("user", JSON.stringify(data.user));
+
+          router.push("/main");
+        } else {
+          toast({ variant: "destructive", title: "failed to Login" });
+          setIsLoading(false);
+        }
+      } catch (error) {
+        toast({ variant: "destructive", title: "failed to Login" });
+        setIsLoading(false);
+      }
     }
   };
 
@@ -52,6 +76,13 @@ export default function Login({ setPage }: any) {
       setPasswordError("");
     }
   };
+  if (isLoading) {
+    return (
+      <div className="h-screen">
+        <Loading />
+      </div>
+    );
+  }
   return (
     <div className="flex items-center h-full justify-center py-6 px-3">
       <form
@@ -77,6 +108,7 @@ export default function Login({ setPage }: any) {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }
+              autoComplete="off"
               // required
             />
 
@@ -108,6 +140,7 @@ export default function Login({ setPage }: any) {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setPassword(e.target.value)
               }
+
               // required
             />
 
@@ -133,7 +166,7 @@ export default function Login({ setPage }: any) {
               </svg>
             </div>
 
-            <Button variant="secondary" className="w-full">
+            <Button variant="secondary" className="w-full" onClick={guestLogin}>
               Login as Guest <User className="ml-2 h-4 w-4" />
             </Button>
             <div className="mt-4 text-center text-sm">

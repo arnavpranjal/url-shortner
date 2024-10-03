@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "url" ADD COLUMN     "Clicks" INTEGER NOT NULL DEFAULT 0;

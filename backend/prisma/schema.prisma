@@ -28,4 +28,16 @@ model User {
   name String
   password String
   createdAt DateTime @default(now())
+  urls url[]
+}
+
+model url{
+  id Int @default(autoincrement()) @unique
+  originalUrl String
+  shortCode String @unique
+  createdAt DateTime @default(now())
+  userId Int?
+  isActive Boolean @default(true)
+  Clicks Int @default(0)
+  user User? @relation(fields:[userId],references : [id])
 }
