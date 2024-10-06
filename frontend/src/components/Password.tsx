@@ -222,7 +222,8 @@ export default function Password({ setPage }: any) {
           </div>
 
           <p className="text-sm mt-1 color-grey">
-            You will receive a 4 digit code on your email id to verify it's you{" "}
+            You will receive a 4 digit code on your email id to verify it&apos;s
+            you
           </p>
         </div>
         <Button className="w-full" onClick={enterOtp}>
