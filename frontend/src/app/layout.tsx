@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      
+      <meta name="google-site-verification" content="VVCLAlEAq8Y7bnnaMtA00Et6qCYEqghjr4bhEOf5o9M" />
       <body>
         <main>{children}</main>
         <Toaster />
